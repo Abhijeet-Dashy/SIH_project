@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import animationVideo from './assets/animation.mp4';
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -8,10 +8,19 @@ import Services from './components/Services';
 import Testimonials from './components/Testimonials';
 import Organizations from './components/Organizations';
 import SocialProof from './components/SocialProof';
+// MediaCards removed
+// Removed premium landing imports
 
 const App: React.FC = () => {
   const [showSplash, setShowSplash] = useState(true);
   const [isFadingSplash, setIsFadingSplash] = useState(false);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  
+  const dismissSplash = () => {
+    if (!showSplash || isFadingSplash) return;
+    setIsFadingSplash(true);
+    setTimeout(() => setShowSplash(false), 300);
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -51,9 +60,9 @@ const App: React.FC = () => {
   useEffect(() => {
     if (!showSplash) return;
     const timeoutId = setTimeout(() => {
-      setIsFadingSplash(true);
-      setTimeout(() => setShowSplash(false), 500);
-    }, 7000); // 10s fallback
+      // Only dismiss as a last resort; prefer waiting for onEnded
+      dismissSplash();
+    }, 10000);
     return () => clearTimeout(timeoutId);
   }, [showSplash]);
 
@@ -70,13 +79,23 @@ const App: React.FC = () => {
             autoPlay
             muted
             playsInline
+            preload="auto"
+            ref={videoRef}
+            onLoadedMetadata={() => {
+              const el = videoRef.current;
+              if (el && Number.isFinite(el.duration) && el.duration > 0) {
+                const targetSeconds = 5;
+                const needsSpeedUp = el.duration > targetSeconds;
+                const desiredRate = needsSpeedUp ? (el.duration / targetSeconds) : 1;
+                // Clamp playback rate to reasonable bounds
+                el.playbackRate = Math.min(3, Math.max(0.5, desiredRate));
+              }
+            }}
             onEnded={() => {
-              setIsFadingSplash(true);
-              setTimeout(() => setShowSplash(false), 500);
+              dismissSplash();
             }}
             onError={() => {
-              setIsFadingSplash(true);
-              setTimeout(() => setShowSplash(false), 500);
+              dismissSplash();
             }}
           />
         </div>

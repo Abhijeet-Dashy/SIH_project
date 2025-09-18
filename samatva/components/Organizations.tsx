@@ -1,58 +1,86 @@
 
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { SparkleIcon, CloudIcon } from './icons/Icons';
+import { SparkleIcon } from './icons/Icons';
 
-const PartnerLogo: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <span className="text-slate-500 font-semibold text-lg">{children}</span>
-);
+type Feature = { id: string; title: string; description: string };
+
+const FEATURES: Feature[] = [
+  { id: 'f1', title: 'Self-sovereign identity', description: 'Students own their data with portable, privacy-preserving identity.' },
+  { id: 'f2', title: 'Gamified, engaging UI', description: 'Delightful interactions that boost retention and daily habit-building.' },
+  { id: 'f3', title: 'Anonymous peer support', description: 'Safe communities plus direct therapist connectivity when needed.' },
+  { id: 'f4', title: 'Campus integration', description: 'Seamless setup without fetching academic data from ERP systems.' },
+  { id: 'f5', title: 'AI crisis detection', description: 'Early detection and timely intervention powered by responsible AI.' },
+];
 
 const Organizations: React.FC = () => {
+  const base = FEATURES;
+  const repeated = useMemo(() => [...base, ...base, ...base], [base]);
+  const baseLen = base.length;
+  const startIndex = baseLen; // start at the middle block for seamless loop
+  const [index, setIndex] = useState(startIndex);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setIndex((i) => {
+        const next = i + 1;
+        // reset seamlessly when entering the last block
+        if (next >= baseLen * 2 + 1) return baseLen + 1;
+        return next;
+      });
+    }, 2500);
+    return () => clearInterval(id);
+  }, [baseLen]);
+
+  const CARD_W = 288; // px width incl. gap (~w-72 + gap-4)
+  const offset = (index - startIndex) * CARD_W;
+
   return (
     <section className="py-16 px-4 bg-slate-50">
-        <motion.div
-            className="container mx-auto bg-sky-50 text-slate-800 rounded-4xl p-12 relative overflow-hidden"
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.6 }}
-        >
-            <div className="absolute -top-10 -left-10 opacity-30">
-                <SparkleIcon className="w-24 h-24 text-sky-200" />
-            </div>
-            <div className="absolute top-10 right-20 opacity-80">
-                <SparkleIcon className="w-12 h-12 text-amber-300" />
-            </div>
-             <div className="absolute -bottom-20 right-10">
-                <CloudIcon className="w-64 h-64 text-sky-200" />
-            </div>
-            
-            <div className="flex flex-wrap justify-around items-center opacity-70 mb-12 space-x-4 space-y-2">
-                <PartnerLogo>Booking.com</PartnerLogo>
-                <PartnerLogo>SEPHORA</PartnerLogo>
-                <PartnerLogo>Western Union</PartnerLogo>
-                <PartnerLogo>BOSTON MEDICAL</PartnerLogo>
-                <PartnerLogo>BAIN & COM</PartnerLogo>
-                <PartnerLogo>VERTEX</PartnerLogo>
-                <PartnerLogo>HSBC</PartnerLogo>
-            </div>
+      <div className="container mx-auto">
+        <div className="text-center mb-10">
+          <h2 className="text-3xl md:text-4xl font-bold text-brand-text">Key features include</h2>
+          <p className="text-brand-text-light mt-2">Modern, student-first foundations built for real outcomes.</p>
+        </div>
 
-            <div className="flex flex-col md:flex-row gap-12 items-center relative z-10">
-                <div className="md:w-1/2">
-                    <motion.h2 className="text-4xl md:text-5xl font-bold font-serif" initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>Over 4,000 leading organizations choose Endel</motion.h2>
-                    <motion.p className="mt-4 text-lg text-slate-600" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.2, duration: 0.5 }}>Support your team today with mindfulness, coaching, EAP, therapy, and psychiatry.</motion.p>
-                    <div className="flex gap-4 mt-8">
-                        <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.98 }} className="bg-slate-800 text-white font-semibold py-3 px-6 rounded-full hover:bg-slate-700 transition-all duration-300">Request a demo</motion.button>
-                        <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.98 }} className="border border-slate-300 text-slate-700 font-semibold py-3 px-6 rounded-full hover:bg-white transition-all duration-300">Learn more</motion.button>
+        <div className="relative">
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-slate-50 to-transparent" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-slate-50 to-transparent" />
+          <div className="overflow-hidden">
+            <motion.div
+              className="flex items-stretch gap-4 py-2 px-1"
+              animate={{ x: -offset }}
+              transition={{ type: 'spring', stiffness: 140, damping: 18 }}
+            >
+              {repeated.map((f, i) => {
+                const position = i - index;
+                const isCenter = position === 0;
+                const scale = isCenter ? 1.05 : Math.max(0.9, 1 - Math.abs(position) * 0.04);
+                const opacity = isCenter ? 1 : Math.max(0.5, 1 - Math.abs(position) * 0.12);
+                const rotate = isCenter ? 0 : Math.max(-2, Math.min(2, -position));
+                return (
+                  <motion.div
+                    key={`${f.id}-${i}`}
+                    className="w-72 shrink-0"
+                    style={{ transformOrigin: 'center' }}
+                    animate={{ scale, opacity, rotate }}
+                    transition={{ duration: 0.35 }}
+                  >
+                    <div className="h-full group rounded-3xl p-6 bg-white ring-1 ring-slate-100 shadow-sm hover:shadow-xl transition-all">
+                      <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-white to-slate-50 shadow-inner flex items-center justify-center ring-1 ring-slate-100">
+                        <SparkleIcon className="w-7 h-7 text-sky-500" />
+                      </div>
+                      <h3 className="mt-4 text-xl font-semibold text-brand-text">{f.title}</h3>
+                      <p className="mt-2 text-brand-text-light">{f.description}</p>
+                      <div className="mt-4 h-1 w-0 bg-gradient-to-r from-sky-400 via-violet-400 to-rose-400 rounded-full transition-all duration-300 group-hover:w-16"></div>
                     </div>
-                </div>
-                <div className="md:w-1/2 grid grid-cols-2 grid-rows-2 gap-4">
-                   <img src="https://picsum.photos/seed/person1/300/300" alt="Person 1" className="rounded-3xl object-cover aspect-square col-start-1 row-start-1" />
-                   <img src="https://picsum.photos/seed/person2/300/300" alt="Person 2" className="rounded-3xl object-cover aspect-square col-start-2 row-start-1" />
-                   <img src="https://picsum.photos/seed/person3/400/400" alt="Person 3" className="rounded-3xl object-cover h-full w-full col-span-2 row-start-2" />
-                </div>
-            </div>
-        </motion.div>
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+          </div>
+        </div>
+      </div>
     </section>
   );
 };
