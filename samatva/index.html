@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Endel: Student Well-being Sanctuary</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;700&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Open Sans', 'sans-serif'],
+              serif: ['Playfair Display', 'serif'],
+            },
+            colors: {
+              'brand-primary': '#93C5FD', // sky-300
+              'brand-primary-light': '#E0F2FE', // sky-100
+              'brand-secondary': '#FFE4E6', // rose-100
+              'brand-secondary-dark': '#7F1D1D', // rose-900 (used sparingly)
+              'brand-tertiary': '#FEF3C7', // amber-100
+              'brand-surface': '#F8FAFC', // slate-50
+              'brand-surface-dark': '#E2E8F0', // slate-200
+              'brand-text': '#0F172A', // slate-900
+              'brand-text-light': '#475569', // slate-600
+            },
+            borderRadius: {
+              '2xl': '1rem',
+              '3xl': '1.5rem',
+              '4xl': '2rem',
+            },
+            keyframes: {
+              float: {
+                '0%, 100%': { transform: 'translateY(0px)' },
+                '50%': { transform: 'translateY(-15px)' },
+              },
+              fadeInUp: {
+                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              subtlePulse: {
+                '0%, 100%': { transform: 'scale(1)' },
+                '50%': { transform: 'scale(1.05)' },
+              },
+            },
+            animation: {
+              'float': 'float 6s ease-in-out infinite',
+              'float-slow': 'float 8s ease-in-out infinite',
+              'float-slower': 'float 10s ease-in-out infinite',
+              'fade-in-up': 'fadeInUp 0.6s ease-out forwards',
+              'subtle-pulse': 'subtlePulse 2s ease-in-out infinite',
+            }
+          },
+        },
+      }
+    </script>
+    <style>
+      /* Class to apply for scroll animations */
+      .animate-on-scroll {
+        opacity: 0;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.19.0",
+    "react/": "https://aistudiocdn.com/react@^19.1.1/",
+    "react": "https://aistudiocdn.com/react@^19.1.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-brand-surface">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
