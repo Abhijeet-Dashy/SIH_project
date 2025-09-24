@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
 const ServiceTag: React.FC<{ children: React.ReactNode; active?: boolean; secondary?: boolean }> = ({ children, active, secondary }) => {
-  let baseClasses = "font-semibold py-3 px-8 rounded-3xl transition-all duration-300 cursor-pointer flex items-center gap-2.5 transform hover:-translate-y-1";
+  let baseClasses = "font-semibold py-2 sm:py-3 px-4 sm:px-8 rounded-2xl sm:rounded-3xl transition-all duration-300 cursor-pointer flex items-center gap-1.5 sm:gap-2.5 transform hover:-translate-y-1 text-sm sm:text-base";
   if (active) {
-    baseClasses += " bg-slate-800 text-white shadow-sm";
+    baseClasses += " bg-slate-800 text-white shadow-sm hover:bg-slate-700";
   } else if (secondary) {
-    baseClasses += " bg-rose-50 text-rose-900 hover:bg-rose-100 shadow-sm";
+    baseClasses += " bg-rose-50 text-rose-900 hover:bg-rose-200 shadow-sm";
   } else {
-    baseClasses += " bg-slate-100 text-slate-600 hover:bg-slate-200";
+    baseClasses += " bg-slate-100 text-slate-600 hover:bg-slate-300";
   }
   
   return <motion.button whileHover={{ y: -4, scale: 1.02 }} whileTap={{ scale: 0.98 }} className={baseClasses}>{children}</motion.button>;
@@ -17,17 +17,17 @@ const ServiceTag: React.FC<{ children: React.ReactNode; active?: boolean; second
 
 const Services: React.FC = () => {
   return (
-    <section className="py-24 bg-slate-50">
-      <div className="container mx-auto px-6 flex flex-col items-center">
+    <section className="py-12 sm:py-24 bg-slate-50">
+      <div className="container mx-auto px-3 sm:px-6 flex flex-col items-center">
         <motion.div
-          className="flex flex-wrap justify-center items-center gap-6 mb-16"
+          className="flex flex-wrap justify-center items-center gap-3 sm:gap-6 mb-8 sm:mb-16"
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, amount: 0.4 }}
           variants={{ hidden: {}, show: { transition: { staggerChildren: 0.08 } } }}
         >
           <ServiceTag active>
-            <span className="w-2.5 h-2.5 bg-white rounded-full animate-pulse"></span>
+            <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 bg-white rounded-full animate-pulse"></span>
             Online Therapy
           </ServiceTag>
           <ServiceTag>Guided Meditations</ServiceTag>
@@ -37,7 +37,7 @@ const Services: React.FC = () => {
           </ServiceTag>
         </motion.div>
         
-        <div className="w-full max-w-6xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="w-full max-w-6xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {[
             { title: 'Find calm', note: 'Quick resets for tense moments', icon: '💛' },
             { title: 'Sleep better', note: 'Wind-down guides for deep rest', icon: '🌙' },

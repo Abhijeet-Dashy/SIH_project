@@ -13,6 +13,14 @@ const FEATURES: Feature[] = [
   { id: 'f5', title: 'AI crisis detection', description: 'Early detection and timely intervention powered by responsible AI.' },
 ];
 
+const PASTEL_BACKGROUNDS = [
+  'bg-pink-200',      // Soft pink
+  'bg-blue-200',      // Soft blue  
+  'bg-green-200',     // Soft green
+  'bg-purple-200',    // Soft purple
+  'bg-yellow-200',    // Soft yellow
+];
+
 const Organizations: React.FC = () => {
   const base = FEATURES;
   const repeated = useMemo(() => [...base, ...base, ...base], [base]);
@@ -32,15 +40,15 @@ const Organizations: React.FC = () => {
     return () => clearInterval(id);
   }, [baseLen]);
 
-  const CARD_W = 288; // px width incl. gap (~w-72 + gap-4)
+  const CARD_W = window.innerWidth < 640 ? 240 : 288; // Smaller cards on mobile
   const offset = (index - startIndex) * CARD_W;
 
   return (
-    <section className="py-16 px-4 bg-slate-50">
+    <section className="py-8 sm:py-16 px-3 sm:px-4 bg-slate-50">
       <div className="container mx-auto">
-        <div className="text-center mb-10">
-          <h2 className="text-3xl md:text-4xl font-bold text-brand-text">Key features include</h2>
-          <p className="text-brand-text-light mt-2">Modern, student-first foundations built for real outcomes.</p>
+        <div className="text-center mb-6 sm:mb-10">
+          <h2 className="text-xl sm:text-3xl md:text-4xl font-bold text-brand-text">Key features include</h2>
+          <p className="text-sm sm:text-base text-brand-text-light mt-1 sm:mt-2">Modern, student-first foundations built for real outcomes.</p>
         </div>
 
         <div className="relative">
@@ -58,21 +66,22 @@ const Organizations: React.FC = () => {
                 const scale = isCenter ? 1.05 : Math.max(0.9, 1 - Math.abs(position) * 0.04);
                 const opacity = isCenter ? 1 : Math.max(0.5, 1 - Math.abs(position) * 0.12);
                 const rotate = isCenter ? 0 : Math.max(-2, Math.min(2, -position));
+                const backgroundClass = PASTEL_BACKGROUNDS[i % PASTEL_BACKGROUNDS.length];
                 return (
                   <motion.div
                     key={`${f.id}-${i}`}
-                    className="w-72 shrink-0"
+                    className="w-60 sm:w-72 shrink-0"
                     style={{ transformOrigin: 'center' }}
                     animate={{ scale, opacity, rotate }}
                     transition={{ duration: 0.35 }}
                   >
-                    <div className="h-full group rounded-3xl p-6 bg-white ring-1 ring-slate-100 shadow-sm hover:shadow-xl transition-all">
-                      <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-white to-slate-50 shadow-inner flex items-center justify-center ring-1 ring-slate-100">
-                        <SparkleIcon className="w-7 h-7 text-sky-500" />
+                    <div className={`h-full group rounded-2xl sm:rounded-3xl p-4 sm:p-6 ${backgroundClass} ring-1 ring-slate-100 shadow-sm hover:shadow-xl transition-all`}>
+                      <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-br from-white to-slate-50 shadow-inner flex items-center justify-center ring-1 ring-slate-100">
+                        <SparkleIcon className="w-4 h-4 sm:w-7 sm:h-7 text-sky-500" />
                       </div>
-                      <h3 className="mt-4 text-xl font-semibold text-brand-text">{f.title}</h3>
-                      <p className="mt-2 text-brand-text-light">{f.description}</p>
-                      <div className="mt-4 h-1 w-0 bg-gradient-to-r from-sky-400 via-violet-400 to-rose-400 rounded-full transition-all duration-300 group-hover:w-16"></div>
+                      <h3 className="mt-3 sm:mt-4 text-lg sm:text-xl font-semibold text-brand-text">{f.title}</h3>
+                      <p className="mt-1 sm:mt-2 text-sm sm:text-base text-brand-text-light">{f.description}</p>
+                      <div className="mt-3 sm:mt-4 h-1 w-0 bg-gradient-to-r from-sky-400 via-violet-400 to-rose-400 rounded-full transition-all duration-300 group-hover:w-12 sm:group-hover:w-16"></div>
                     </div>
                   </motion.div>
                 );

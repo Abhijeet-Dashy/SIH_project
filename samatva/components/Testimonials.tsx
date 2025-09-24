@@ -66,12 +66,12 @@ const Testimonials: React.FC = () => {
             delay="100ms"
           />
           <TestimonialCard
-            quote="Endel helped me begin the process of stepping back from toxic thinking and being a part of something bigger than my own personal grievances."
+            quote="Samatva helped me begin the process of stepping back from toxic thinking and being a part of something bigger than my own personal grievances."
             author="Member on learning to think in more helpful ways"
             delay="200ms"
           />
           <TestimonialCard
-            quote="The strategies in the courses allow me to work on a part of myself that I am struggling with. Endel replaced the relationship I have with myself."
+            quote="The strategies in the courses allow me to work on a part of myself that I am struggling with. Samatva replaced the relationship I have with myself."
             author="Member on working through their feelings"
             delay="300ms"
           />
